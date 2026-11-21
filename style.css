@@ -686,3 +686,130 @@ footer a {
     transform: translateY(-4px);
     opacity: 0.9;
 }
+/* ==============================
+   بخش ارتباط با همسفر
+============================== */
+
+.contact-section {
+    padding: 65px 20px;
+    background: linear-gradient(135deg, #101c2c, #1c3045);
+    text-align: center;
+    direction: rtl;
+    border-radius: 25px;
+    margin: 40px 15px 20px;
+    color: white;
+}
+
+.contact-header {
+    max-width: 600px;
+    margin: 0 auto 40px;
+}
+
+.contact-tag {
+    color: #e6b85c;
+    font-size: 12px;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+
+.contact-header h2 {
+    font-size: 27px;
+    margin: 15px 0;
+    color: #ffffff;
+}
+
+.contact-header p {
+    color: #c4ced8;
+    font-size: 14px;
+    line-height: 2;
+}
+
+.contact-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1050px;
+    margin: auto;
+}
+
+.contact-card {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 30px 15px;
+    transition: 0.3s ease;
+}
+
+.contact-card:hover {
+    transform: translateY(-7px);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #e6b85c;
+}
+
+.contact-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 16px;
+    background: rgba(230, 184, 92, 0.15);
+    color: #e6b85c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    margin: 0 auto 18px;
+}
+
+.contact-card h3 {
+    font-size: 17px;
+    margin-bottom: 12px;
+    color: #ffffff;
+}
+
+.contact-card p {
+    font-size: 12px;
+    color: #c4ced8;
+    line-height: 2;
+    min-height: 35px;
+}
+
+.contact-number {
+    display: block;
+    color: #e6b85c;
+    font-size: 19px;
+    font-weight: bold;
+    text-decoration: none;
+    direction: ltr;
+    margin: 18px 0;
+}
+
+.contact-label {
+    display: inline-block;
+    color: #ffffff;
+    font-size: 11px;
+    background: rgba(230, 184, 92, 0.15);
+    padding: 8px 15px;
+    border-radius: 20px;
+}
+
+/* نمایش در موبایل */
+
+@media (max-width: 768px) {
+
+    .contact-section {
+        padding: 45px 15px;
+    }
+
+    .contact-header h2 {
+        font-size: 22px;
+    }
+
+    .contact-cards {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .contact-card {
+        padding: 25px 15px;
+    }
+
+}
