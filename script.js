@@ -503,28 +503,40 @@ async function calculatePrice() {
         // محاسبه قیمت
         // ---------------------------------
 
-       // محاسبه قیمت پایه
-let finalPrice = distance * rate;
+  // =====================================
+// محاسبه قیمت سفر + تعداد مسافران + بار
+// =====================================
+
+// محاسبه قیمت پایه
+let basePrice = distance * rate;
 
 // دریافت تعداد مسافران
 const passengers = Number(
     document.getElementById("passengers").value
 );
 
-// از ۴ مسافر به بالا، ۱۵ درصد افزایش قیمت
+// افزایش ۱۵ درصدی برای ۴ مسافر به بالا
 if (passengers >= 4) {
-    finalPrice = finalPrice * 1.15;
+    basePrice = basePrice * 1.15;
 }
 
-// گرد کردن قیمت نهایی
-finalPrice = Math.round(finalPrice);
+// دریافت درصد بار
+const baggagePercent = Number(
+    document.getElementById("baggage").value
+);
+
+// محاسبه هزینه اضافه بار
+const baggagePrice = basePrice * baggagePercent / 100;
+
+// محاسبه قیمت نهایی
+let finalPrice = Math.round(
+    basePrice + baggagePrice
+);
 
 // نمایش قیمت
 priceElement.textContent =
     finalPrice.toLocaleString("fa-IR") + " تومان";
-
-        result.style.display = "block";
-
+    result.style.display = "block";
 
         // ---------------------------------
         // آماده کردن نقشه
@@ -692,3 +704,13 @@ document.getElementById("whatsappBtn").addEventListener("click", function(e) {
     window.open(whatsappURL, "_blank");
 
 });
+function calculateBaggagePrice(basePrice) {
+
+    const baggagePercent = Number(
+        document.getElementById("baggage").value
+    );
+
+    const extraPrice = basePrice * baggagePercent / 100;
+
+    return Math.round(basePrice + extraPrice);
+}
