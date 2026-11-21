@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>همسفر | محاسبه هوشمند هزینه سفر</title>
+
+    <link rel="stylesheet" href="./style1.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="logo">
+        همسفر
+        <span>Hamsafar</span>
+    </div>
+
+    <nav>
+        <a href="#home">صفحه اصلی</a>
+        <a href="#calculator">محاسبه هزینه</a>
+        <a href="#cars">خودروها</a>
+        <a href="#services">خدمات ما</a>
+    </nav>
+
+    <a href="tel:09333004532" class="contact-btn">
+        تماس با ما
+    </a>
+
+</header>
+
+
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <span class="small-title">
+            همراه مطمئن سفرهای شما
+        </span>
+
+        <h1>
+            با همسفر،
+            <br>
+            آسوده سفر کنید
+        </h1>
+
+        <p>
+            مقصدت رو انتخاب کن، خودروت رو مشخص کن
+            و هزینه سفرت رو در چند ثانیه ببین.
+        </p>
+
+        <a href="#calculator" class="main-btn">
+            محاسبه هزینه سفر
+        </a>
+
+    </div>
+
+</section>
+
+
+<section class="calculator-section" id="calculator">
+
+    <div class="section-title">
+
+        <span>محاسبه هوشمند</span>
+
+        <h2>هزینه سفرت رو محاسبه کن</h2>
+
+        <p>
+            مبدأ، مقصد و خودروی مورد نظرت رو انتخاب کن.
+        </p>
+
+    </div>
+
+
+    <div class="calculator-box">
+
+        <div class="form-group">
+
+            <label>مبدأ سفر</label>
+
+            <select id="origin">
+
+                <option value="تهران">تهران</option>
+
+                <option value="ساری">ساری</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>مقصد سفر</label>
+
+            <input
+                type="text"
+                id="destination"
+                list="cityList"
+                placeholder="نام شهر مقصد را وارد کنید..."
+                autocomplete="off"
+            >
+
+            <datalist id="cityList">
+
+                <option value="مشهد">
+                <option value="ساری">
+                <option value="شیراز">
+                <option value="قزوین">
+                <option value="زنجان">
+                <option value="تهران">
+                <option value="اصفهان">
+                <option value="رامسر">
+                <option value="چالوس">
+                <option value="آمل">
+                <option value="بابل">
+                <option value="گرگان">
+                <option value="رشت">
+                <option value="انزلی">
+                <option value="قم">
+                <option value="کاشان">
+                <option value="کرج">
+                <option value="سمنان">
+                <option value="شاهرود">
+
+            </datalist>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>انتخاب خودرو</label>
+
+            <select id="car">
+
+            </select>
+
+        </div>
+
+<div class="form-group">
+
+    <label>تعداد مسافران</label>
+
+    <select id="passengers">
+        <option value="1">۱ نفر</option>
+        <option value="2">۲ نفر</option>
+        <option value="3" selected>۳ نفر</option>
+        <option value="4">۴ نفر</option>
+        <option value="5">۵ نفر</option>
+        <option value="6">۶ نفر</option>
+        <option value="7">۷ نفر</option>
+    </select>
+
+</div>
+
+
+<div class="form-group">
+
+    <label>میزان بار همراه</label>
+
+    <select id="luggage">
+        <option value="بدون بار">بدون بار</option>
+        <option value="بار کم">بار کم</option>
+        <option value="بار متوسط">بار متوسط</option>
+        <option value="بار زیاد">بار زیاد</option>
+    </select>
+
+</div>
+
+
+        <button id="calculateBtn" class="calculate-btn">
+
+            محاسبه هزینه سفر
+
+        </button>
+
+
+        <div id="loading" class="loading">
+
+            در حال محاسبه مسیر و هزینه سفر...
+
+        </div>
+
+
+        <div id="result" class="result">
+
+            <span>هزینه نهایی سفر شما</span>
+
+            <h2 id="price">۰ تومان</h2>
+
+            <p>
+                سفر مطمئن با همسفر
+            </p>
+
+            <div class="booking-buttons">
+
+    <a id="whatsappBtn" href="#" target="_blank">
+        ثبت درخواست در واتساپ
+    </a>
+
+    <a href="tel:09333004532" class="call-btn">
+        تماس با همسفر
+    </a>
+
+</div>
+
+
+        </div>
+
+
+
+        <button id="mapBtn" class="map-btn">
+
+            مشاهده مسیر روی نقشه
+
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<section class="map-section" id="mapSection">
+
+    <div class="section-title">
+
+        <span>مسیر سفر</span>
+
+        <h2>مسیر مبدأ تا مقصد</h2>
+
+    </div>
+
+    <div id="map"></div>
+
+</section>
+
+
+
+<section class="cars-section" id="cars">
+
+    <div class="section-title">
+
+        <span>ناوگان همسفر</span>
+
+        <h2>خودروهای ما</h2>
+
+        <p>
+            انتخاب خودرو متناسب با نیاز شما
+        </p>
+
+    </div>
+
+
+    <div class="cars-container" id="carsContainer">
+
+    </div>
+
+</section>
+
+
+
+<section class="services-section" id="services">
+
+    <div class="section-title">
+
+        <span>خدمات همسفر</span>
+
+        <h2>همراه شما در هر مسیر</h2>
+
+    </div>
+
+
+    <div class="services-container">
+
+        <div class="service-card">
+
+            <div class="service-icon">✈</div>
+
+            <h3>ترانسفر فرودگاهی</h3>
+
+            <p>
+                جابه‌جایی مطمئن به فرودگاه و از فرودگاه
+            </p>
+
+        </div>
+
+
+        <div class="service-card">
+
+            <div class="service-icon">🚘</div>
+
+            <h3>سفر بین‌شهری</h3>
+
+            <p>
+                سفر به تمام نقاط کشور با خودروهای متنوع
+            </p>
+
+        </div>
+
+
+        <div class="service-card">
+
+            <div class="service-icon">🏙</div>
+
+            <h3>سرویس درون‌شهری</h3>
+
+            <p>
+                جابه‌جایی راحت و مطمئن در سطح شهر
+            </p>
+
+        </div>
+
+
+        <div class="service-card">
+
+            <div class="service-icon">⭐</div>
+
+            <h3>سرویس VIP</h3>
+
+            <p>
+                تجربه سفری راحت با خودروهای ویژه
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<footer>
+
+    <h2>همسفر | Hamsafar</h2>
+
+    <p>
+        همراه همیشگی شما در مسیرهای دور و نزدیک
+    </p>
+
+    <a href="tel:09333004532">
+        ۰۹۳۳۳۰۰۴۵۳۲
+    </a>
+
+    <p class="copyright">
+        تمامی حقوق برای همسفر محفوظ است.
+    </p>
+
+</footer>
+
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
