@@ -23,6 +23,10 @@ const carPrices = {
 // 2. اطلاعات خودروها
 // =====================================
 
+// =====================================
+// 2. اطلاعات خودروها
+// =====================================
+
 const cars = {
 
     "تهران": [
@@ -35,6 +39,11 @@ const cars = {
         {
             name: "پژو ۴۰۵",
             image: "images/405.jpg"
+        },
+
+        {
+            name: "جک J4",
+            image: "images/jac-j4.jpg"
         }
 
     ],
@@ -59,7 +68,6 @@ const cars = {
     ]
 
 };
-
 
 // =====================================
 // 3. کیلومترهای دستی مبدأ تهران
@@ -139,54 +147,64 @@ function updateCars() {
 
     const availableCars = cars[origin];
 
-    carInput.innerHTML = "";
+   carInput.innerHTML = '<option value="">انتخاب خودرو</option>';
 
-    carsContainer.innerHTML = "";
+carsContainer.innerHTML = "";
 
 
-    // خودروهای قابل انتخاب برای محاسبه سفر
+// خودروهای قابل انتخاب برای محاسبه سفر
 
-    availableCars.forEach(car => {
+availableCars.forEach(car => {
 
-        const option = document.createElement("option");
+    const option = document.createElement("option");
 
-        option.value = car.name;
+    option.value = car.name;
 
-        option.textContent = car.name;
+    option.textContent = car.name;
 
-        carInput.appendChild(option);
+    carInput.appendChild(option);
 
-    });
-
+});
 
     // نمایش تمام خودروهای ناوگان همسفر
 
-    const allCars = [
+   const allCars = [
 
-    
+    // خودروهای مبدأ تهران
     {
         name: "پژو ۴۰۵",
-        image: "Cars/405.webp"
+        image: "Cars/405.webp",
+        origin: "تهران"
     },
     {
         name: "جک J4",
-        image: "Cars/Jac j4.webp"
+        image: "Cars/Jac j4.webp",
+        origin: "تهران"
     },
     {
         name: "آریو",
-        image: "Cars/اریووو.webp"
+        image: "Cars/اریووو.webp",
+        origin: "تهران"
     },
+
+    // خودروهای مبدأ ساری
     {
         name: "تویوتا کمری",
-        image: "Cars/تویوتا کمری.webp"
+        image: "Cars/تویوتا کمری.webp",
+        origin: "ساری"
+    },
+    {
+        name: "جک J4",
+        image: "Cars/Jac j4.webp",
+        origin: "ساری"
     },
     {
         name: "سمند سورن",
-        image: "Cars/سووورن.jpg"
+        image: "Cars/سووورن.jpg",
+        origin: "ساری"
     }
 
-
-    ];
+];
 
 
     allCars.forEach((car, index) => {
