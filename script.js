@@ -591,10 +591,10 @@ let routeLayer = null;
 
 async function getCoordinates(city) {
 
-    const url =
-        "https://nominatim.openstreetmap.org/search?format=jsonv2&q="
-        + encodeURIComponent(city + ", Iran")
-        + "&limit=1&accept-language=fa";
+   const url =
+    "https://nominatim.openstreetmap.org/search?format=jsonv2&q=" +
+    encodeURIComponent(city + ", Iran") +
+    "&limit=1&accept-language=fa";
 
     const response = await fetch(url);
 
@@ -1029,6 +1029,8 @@ updateCars();
 // =====================================
 // ارسال اطلاعات سفر به واتساپ
 // =====================================
+console.log("WhatsApp button connected");
+alert("اتصال جاوااسکریپت برقرار است");
 
 document.getElementById("whatsappBtn").addEventListener("click", function(e) {
 
@@ -1094,10 +1096,9 @@ const message = `
     const whatsappURL =
         "https://wa.me/989333004532?text=" +
         encodeURIComponent(message);
+console.log("WhatsApp URL:", whatsappURL);
 
-        console.log("WhatsApp URL:", whatsappURL);
-alert("اطلاعات آماده ارسال به واتساپ است.");
-    window.location.href = whatsappURL;
+window.open(whatsappURL, "_blank");
 
 });
 function calculateBaggagePrice(basePrice) {
