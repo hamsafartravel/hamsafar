@@ -1038,7 +1038,7 @@ document.getElementById("whatsappBtn").addEventListener("click", function(e) {
     const destination = document.getElementById("destination").value;
     const car = document.getElementById("car").value;
     const passengers = document.getElementById("passengers").value;
-    const luggage = document.getElementById("luggage").value;
+    const luggage = document.getElementById("baggage").selectedOptions[0].text;
     const price = document.getElementById("price").innerText;
 
     if (!destination) {
@@ -1095,7 +1095,9 @@ const message = `
         "https://wa.me/989333004532?text=" +
         encodeURIComponent(message);
 
-    window.open(whatsappURL, "_blank");
+        console.log("WhatsApp URL:", whatsappURL);
+alert("اطلاعات آماده ارسال به واتساپ است.");
+    window.location.href = whatsappURL;
 
 });
 function calculateBaggagePrice(basePrice) {
