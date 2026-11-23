@@ -89,15 +89,32 @@
 
         <div class="form-group">
 
-            <label>مبدأ سفر</label>
+            <div class="form-group">
 
-            <select id="origin">
+    <label for="originProvince">استان مبدأ</label>
 
-                <option value="تهران">تهران</option>
+    <select id="originProvince">
 
-                <option value="ساری">ساری</option>
+        <option value="مازندران">استان مازندران</option>
 
-            </select>
+        <option value="تهران">استان تهران</option>
+
+    </select>
+
+</div>
+
+
+<div class="form-group">
+
+    <label for="origin">شهر مبدأ</label>
+
+    <select id="origin">
+
+        <option value="">ابتدا استان را انتخاب کنید</option>
+
+    </select>
+
+</div>
 
         </div>
 
@@ -150,6 +167,36 @@
             </select>
 
         </div>
+
+        <!-- گزینه سفر رفت و برگشت -->
+
+<div class="round-trip-box">
+
+    <label class="round-trip-label">
+
+        <input type="checkbox" id="roundTrip">
+
+        <span>
+            سفر رفت و برگشت داری؟
+        </span>
+
+    </label>
+
+    <p class="round-trip-hint">
+        یه پیشنهاد ویژه برای سفرهای رفت و برگشت داریم!
+    </p>
+
+    <div id="roundTripMessage" class="round-trip-message" style="display: none;">
+
+        🎉 خبر خوب برای شما!
+
+        <p>
+            هزینه سفر شما با نرخ قبلی محاسبه می‌شه.
+        </p>
+
+    </div>
+
+</div>
 
 <div class="form-group">
 
@@ -357,14 +404,7 @@
         تمامی حقوق برای همسفر محفوظ است.
     </p>
 
-</footer>
-
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<script src="script.js"></script>
-
-<!-- بخش ارتباط با همسفر -->
+    <!-- بخش ارتباط با همسفر -->
 
 <section class="contact-section" id="contact">
 
@@ -434,6 +474,15 @@
     </div>
 
 </section>
+
+
+
+</footer>
+
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="script.js"></script>
 
 
 
