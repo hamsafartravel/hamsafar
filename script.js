@@ -4,7 +4,8 @@
 // برای تغییر قیمت ها فقط عددهای این قسمت را عوض کن.
 // قیمت ها به تومان هستند.
 
-const carPrices = {
+// نرخ‌های قدیمی مخصوص سفر رفت و برگشت
+const oldCarPrices = {
 
     "پژو ۴۰۵": 12000,
 
@@ -18,6 +19,21 @@ const carPrices = {
 
 };
 
+
+// نرخ‌های جدید اتحادیه مخصوص سفر یک‌طرفه
+const carPrices = {
+
+    "پژو ۴۰۵": 14500,
+
+    "آریو": 16500,
+
+    "جک J4": 17500,
+
+    "تویوتا کمری": 21000,
+
+    "سمند سورن": 15500
+
+};
 
 // =====================================
 // 2. اطلاعات خودروها
@@ -118,6 +134,8 @@ const originCoordinates = {
 
 const originInput = document.getElementById("origin");
 
+const originProvinceInput = document.getElementById("originProvince");
+
 const destinationInput = document.getElementById("destination");
 
 const carInput = document.getElementById("car");
@@ -136,6 +154,95 @@ const mapSection = document.getElementById("mapSection");
 
 const carsContainer = document.getElementById("carsContainer");
 
+// شهرهای استان‌های مبدأ
+
+const provinceCities = {
+
+    "مازندران": [
+        "ساری",
+        "آمل",
+        "بابل",
+        "قائم‌شهر",
+        "بابلسر",
+        "نوشهر",
+        "چالوس",
+        "تنکابن",
+        "بهشهر",
+        "نکا",
+        "جویبار",
+        "فریدون‌کنار",
+        "محمودآباد",
+        "نور",
+        "رامسر",
+        "کلاردشت",
+        "عباس‌آباد",
+        "گلوگاه",
+        "زیرآب",
+        "پل‌سفید",
+        "شیرگاه",
+        "مرزن‌آباد",
+        "کیاسر",
+        "سلمان‌شهر",
+        "سرخرود",
+        "ایزدشهر",
+        "گتاب",
+        "زرگرمحله",
+        "امیرکلا",
+        "خوش‌رودپی"
+    ],
+
+    "تهران": [
+        "تهران",
+        "اسلامشهر",
+        "شهریار",
+        "پردیس",
+        "دماوند",
+        "ورامین",
+        "پاکدشت",
+        "رباط‌کریم",
+        "ملارد",
+        "قدس",
+        "قرچک",
+        "پیشوا",
+        "فیروزکوه",
+        "شمیرانات",
+        "بومهن",
+        "رودهن",
+        "اندیشه",
+        "فردوسیه",
+        "صباشهر",
+        "چهاردانگه",
+        "کهریزک",
+        "فشم",
+        "لواسان",
+        "آبسرد"
+    ]
+
+};
+
+// نمایش شهرهای استان انتخاب‌شده
+
+function updateOriginCities() {
+
+    const province = originProvinceInput.value;
+
+    const cities = provinceCities[province];
+
+    originInput.innerHTML = "";
+
+    cities.forEach(city => {
+
+        const option = document.createElement("option");
+
+        option.value = city;
+
+        option.textContent = city;
+
+        originInput.appendChild(option);
+
+    });
+
+}
 
 // =====================================
 // 6. نمایش خودروهای هر مبدأ
@@ -143,9 +250,11 @@ const carsContainer = document.getElementById("carsContainer");
 
 function updateCars() {
 
-    const origin = originInput.value;
+   const province = originProvinceInput.value;
 
-    const availableCars = cars[origin];
+   const origin = province === "مازندران" ? "ساری" : "تهران";
+
+   const availableCars = cars[origin];
 
    carInput.innerHTML = '<option value="">انتخاب خودرو</option>';
 
@@ -246,6 +355,13 @@ availableCars.forEach(car => {
 
 }
 
+originProvinceInput.addEventListener("change", function() {
+    updateOriginCities();
+    updateCars();
+
+    result.style.display = "none";
+    mapBtn.style.display = "none";
+});
 
 // =====================================
 // 7. تغییر مبدأ
@@ -413,12 +529,19 @@ async function calculatePrice() {
 
     const origin = originInput.value;
 
+    const province = originProvinceInput.value;
+
     const destination = destinationInput.value.trim();
 
-    const car = carInput.value;
+   const car = carInput.value;
 
-    const rate = carPrices[car];
+// بررسی انتخاب سفر رفت و برگشت
+const isRoundTrip = document.getElementById("roundTrip").checked;
 
+// انتخاب نرخ مناسب
+const rate = isRoundTrip
+    ? oldCarPrices[car]
+    : carPrices[car];
 
     if (!destination) {
 
@@ -470,22 +593,27 @@ async function calculatePrice() {
         // ---------------------------------
         // اول بررسی کیلومترهای دستی
         // ---------------------------------
+const knownDistance =
+    manualDistances[origin]?.[destination];
 
-        const knownDistance =
-            manualDistances[origin]?.[destination];
+if (originCoordinates[origin]) {
+    start = {
+        lat: originCoordinates[origin][0],
+        lon: originCoordinates[origin][1]
+    };
+} else {
+    start = await getCoordinates(`${origin}, ${province}`);
+}
 
+
+
+        
 
         if (knownDistance !== undefined) {
 
             distance = knownDistance;
 
-            start = {
-
-                lat: originCoordinates[origin][0],
-
-                lon: originCoordinates[origin][1]
-
-            };
+           
 
             end = await getCoordinates(destination);
 
@@ -497,13 +625,7 @@ async function calculatePrice() {
             // دریافت خودکار مسیر از نقشه
             // ---------------------------------
 
-            start = {
-
-                lat: originCoordinates[origin][0],
-
-                lon: originCoordinates[origin][1]
-
-            };
+           
 
             end = await getCoordinates(destination);
 
@@ -732,3 +854,24 @@ function calculateBaggagePrice(basePrice) {
 
     return Math.round(basePrice + extraPrice);
 }
+// نمایش پیام پیشنهاد ویژه سفر رفت و برگشت
+
+const roundTripCheckbox = document.getElementById("roundTrip");
+
+const roundTripMessage = document.getElementById("roundTripMessage");
+
+roundTripCheckbox.addEventListener("change", function () {
+
+    if (this.checked) {
+
+        roundTripMessage.style.display = "block";
+
+    } else {
+
+        roundTripMessage.style.display = "none";
+
+    }
+
+});
+updateOriginCities();
+updateCars();
