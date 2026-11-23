@@ -1030,7 +1030,7 @@ updateCars();
 // ارسال اطلاعات سفر به واتساپ
 // =====================================
 console.log("WhatsApp button connected");
-alert("اتصال جاوااسکریپت برقرار است");
+
 
 document.getElementById("whatsappBtn").addEventListener("click", function(e) {
 
