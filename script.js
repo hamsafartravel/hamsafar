@@ -136,6 +136,8 @@ const originInput = document.getElementById("origin");
 
 const originProvinceInput = document.getElementById("originProvince");
 
+const destinationProvinceInput = document.getElementById("destinationProvince");
+
 const destinationInput = document.getElementById("destination");
 
 const carInput = document.getElementById("car");
@@ -154,79 +156,229 @@ const mapSection = document.getElementById("mapSection");
 
 const carsContainer = document.getElementById("carsContainer");
 
+let lastTripDetails = null;
+
+function invalidateTripDetails() {
+
+    lastTripDetails = null;
+
+    result.style.display = "none";
+
+    mapBtn.style.display = "none";
+
+}
+[
+    originInput,
+    originProvinceInput,
+    destinationInput,
+    destinationProvinceInput,
+    carInput,
+    document.getElementById("passengers"),
+    document.getElementById("baggage"),
+    document.getElementById("roundTrip")
+].forEach(input => {
+
+    input.addEventListener("change", invalidateTripDetails);
+
+    input.addEventListener("input", invalidateTripDetails);
+
+});
+
 // شهرهای استان‌های مبدأ
 
 const provinceCities = {
 
     "مازندران": [
-        "ساری",
-        "آمل",
-        "بابل",
-        "قائم‌شهر",
-        "بابلسر",
-        "نوشهر",
-        "چالوس",
-        "تنکابن",
-        "بهشهر",
-        "نکا",
-        "جویبار",
-        "فریدون‌کنار",
-        "محمودآباد",
-        "نور",
-        "رامسر",
-        "کلاردشت",
-        "عباس‌آباد",
-        "گلوگاه",
-        "زیرآب",
-        "پل‌سفید",
-        "شیرگاه",
-        "مرزن‌آباد",
-        "کیاسر",
-        "سلمان‌شهر",
-        "سرخرود",
-        "ایزدشهر",
-        "گتاب",
-        "زرگرمحله",
-        "امیرکلا",
-        "خوش‌رودپی"
+        "ساری", "آمل", "بابل", "قائم‌شهر", "بابلسر",
+        "نوشهر", "چالوس", "تنکابن", "بهشهر", "نکا",
+        "جویبار", "فریدون‌کنار", "محمودآباد", "نور",
+        "رامسر", "کلاردشت", "عباس‌آباد", "گلوگاه",
+        "زیرآب", "پل‌سفید", "شیرگاه", "مرزن‌آباد",
+        "کیاسر", "سلمان‌شهر", "سرخرود", "ایزدشهر",
+        "گتاب", "زرگرمحله", "امیرکلا", "خوش‌رودپی"
     ],
 
     "تهران": [
-        "تهران",
-        "اسلامشهر",
-        "شهریار",
-        "پردیس",
-        "دماوند",
-        "ورامین",
-        "پاکدشت",
-        "رباط‌کریم",
-        "ملارد",
-        "قدس",
-        "قرچک",
-        "پیشوا",
-        "فیروزکوه",
-        "شمیرانات",
-        "بومهن",
-        "رودهن",
-        "اندیشه",
-        "فردوسیه",
-        "صباشهر",
-        "چهاردانگه",
-        "کهریزک",
-        "فشم",
-        "لواسان",
-        "آبسرد"
+        "تهران", "اسلامشهر", "شهریار", "پردیس",
+        "دماوند", "ورامین", "پاکدشت", "رباط‌کریم",
+        "ملارد", "قدس", "قرچک", "پیشوا", "فیروزکوه",
+        "شمیرانات", "بومهن", "رودهن", "اندیشه",
+        "فردوسیه", "صباشهر", "چهاردانگه",
+        "کهریزک", "فشم", "لواسان", "آبسرد"
+    ],
+
+    "آذربایجان شرقی": [
+        "تبریز", "مراغه", "مرند", "میانه", "اهر",
+        "بناب", "سراب", "شبستر", "اسکو", "عجب‌شیر",
+        "جلفا", "کلیبر", "هریس"
+    ],
+
+    "آذربایجان غربی": [
+        "ارومیه", "خوی", "بوکان", "مهاباد", "میاندوآب",
+        "سلماس", "نقده", "پیرانشهر", "سردشت",
+        "تکاب", "شاهین‌دژ", "ماکو"
+    ],
+
+    "اردبیل": [
+        "اردبیل", "مشگین‌شهر", "پارس‌آباد", "خلخال",
+        "گرمی", "نمین", "بیله‌سوار", "سرعین", "نیر"
+    ],
+
+    "اصفهان": [
+        "اصفهان", "کاشان", "نجف‌آباد", "خمینی‌شهر",
+        "شاهین‌شهر", "فلاورجان", "زرین‌شهر", "مبارکه",
+        "گلپایگان", "نطنز", "اردستان", "نائین",
+        "فریدون‌شهر", "شهرضا"
+    ],
+
+    "البرز": [
+        "کرج", "فردیس", "هشتگرد", "نظرآباد",
+        "طالقان", "محمدشهر", "ماهدشت", "اشتهارد",
+        "چهارباغ"
+    ],
+
+    "ایلام": [
+        "ایلام", "دهلران", "آبدانان", "مهران",
+        "دره‌شهر", "ایوان", "چرداول", "بدره"
+    ],
+
+    "بوشهر": [
+        "بوشهر", "برازجان", "گناوه", "کنگان",
+        "دیر", "جم", "عسلویه", "خورموج", "دلوار"
+    ],
+
+    "چهارمحال و بختیاری": [
+        "شهرکرد", "بروجن", "فارسان", "لردگان",
+        "اردل", "سامان", "فرخ‌شهر", "کوهرنگ"
+    ],
+
+    "خراسان جنوبی": [
+        "بیرجند", "قائن", "فردوس", "طبس",
+        "نهبندان", "سربیشه", "درمیان", "بشرویه"
+    ],
+
+    "خراسان رضوی": [
+        "مشهد", "نیشابور", "سبزوار", "تربت حیدریه",
+        "کاشمر", "قوچان", "تربت جام", "گناباد",
+        "چناران", "خواف", "تایباد", "سرخس"
+    ],
+
+    "خراسان شمالی": [
+        "بجنورد", "شیروان", "اسفراین", "جاجرم",
+        "فاروج", "آشخانه", "گرمه", "راز"
+    ],
+
+    "خوزستان": [
+        "اهواز", "آبادان", "خرمشهر", "دزفول",
+        "ماهشهر", "اندیمشک", "شوش", "شوشتر",
+        "بهبهان", "ایذه", "رامهرمز", "مسجدسلیمان"
+    ],
+
+    "زنجان": [
+        "زنجان", "ابهر", "خرمدره", "قیدار",
+        "طارم", "ماهنشان", "سلطانیه"
+    ],
+
+    "سمنان": [
+        "سمنان", "شاهرود", "دامغان", "گرمسار",
+        "مهدی‌شهر", "آرادان", "میامی"]
+        ,
+
+    "سیستان و بلوچستان": [
+        "زاهدان", "چابهار", "زابل", "ایرانشهر",
+        "خاش", "سراوان", "کنارک", "نیک‌شهر",
+        "راسک", "میرجاوه"
+    ],
+
+    "فارس": [
+        "شیراز", "مرودشت", "کازرون", "جهرم",
+        "فسا", "لار", "داراب", "آباده",
+        "اقلید", "فیروزآباد", "نی‌ریز", "ممسنی"
+    ],
+
+    "قزوین": [
+        "قزوین", "تاکستان", "آبیک", "الوند",
+        "بوئین‌زهرا", "محمدیه", "اقبالیه"
+    ],
+
+    "قم": [
+        "قم", "جعفریه", "کهک", "دستجرد",
+        "سلفچگان", "قنوات"
+    ],
+
+    "کردستان": [
+        "سنندج", "سقز", "مریوان", "بانه",
+        "قروه", "بیجار", "کامیاران", "دیواندره",
+        "دهگلان"
+    ],
+
+    "کرمان": [
+        "کرمان", "رفسنجان", "سیرجان", "جیرفت",
+        "بم", "زرند", "کهنوج", "شهربابک",
+        "بافت", "راور", "بردسیر"
+    ],
+
+    "کرمانشاه": [
+        "کرمانشاه", "اسلام‌آباد غرب", "هرسین",
+        "کنگاور", "سنقر", "جوانرود", "پاوه",
+        "سرپل ذهاب", "قصر شیرین"
+    ],
+
+    "کهگیلویه و بویراحمد": [
+        "یاسوج", "دهدشت", "گچساران", "لیکک",
+        "سی‌سخت", "چرام", "باشت"
+    ],
+
+    "گلستان": [
+        "گرگان", "گنبد کاووس", "علی‌آباد کتول",
+        "بندر ترکمن", "آق‌قلا", "کردکوی",
+        "بندر گز", "مینودشت", "کلاله", "آزادشهر"
+    ],
+
+    "گیلان": [
+        "رشت", "بندر انزلی", "لاهیجان", "لنگرود",
+        "آستارا", "تالش", "رودسر", "فومن",
+        "صومعه‌سرا", "آستانه اشرفیه", "رودبار"
+    ],
+
+    "لرستان": [
+        "خرم‌آباد", "بروجرد", "دورود", "الیگودرز",
+        "ازنا", "کوهدشت", "نورآباد", "پلدختر"
+    ],
+
+    "مرکزی": [
+        "اراک", "ساوه", "خمین", "محلات",
+        "دلیجان", "تفرش", "شازند", "آشتیان",
+        "کمیجان"
+    ],
+
+    "هرمزگان": [
+        "بندرعباس", "قشم", "کیش", "میناب",
+        "بندر لنگه", "جاسک", "رودان", "حاجی‌آباد",
+        "پارسیان", "بستک"
+    ],
+
+    "همدان": [
+        "همدان", "ملایر", "نهاوند", "تویسرکان",
+        "کبودرآهنگ", "اسدآباد", "رزن", "بهار"
+    ],
+
+    "یزد": [
+        "یزد", "میبد", "اردکان", "بافق",
+        "مهریز", "ابرکوه", "تفت", "اشکذر"
     ]
 
 };
 
 // نمایش شهرهای استان انتخاب‌شده
 
+
+
 function updateOriginCities() {
 
     const province = originProvinceInput.value;
 
-    const cities = provinceCities[province];
+    const cities = provinceCities[province] || [];
 
     originInput.innerHTML = "";
 
@@ -241,6 +393,36 @@ function updateOriginCities() {
         originInput.appendChild(option);
 
     });
+
+}
+
+function updateDestinationCities() {
+
+    const province = destinationProvinceInput.value;
+
+    const cities = provinceCities[province];
+
+    const cityList = document.getElementById("destinationCityList");
+
+    cityList.innerHTML = "";
+
+    if (cities) {
+
+        cities.forEach(city => {
+
+            const option = document.createElement("option");
+
+            option.value = city;
+
+            cityList.appendChild(option);
+
+        });
+
+    }
+
+    destinationInput.value = "";
+
+    destinationInput.disabled = false;
 
 }
 
@@ -361,6 +543,14 @@ originProvinceInput.addEventListener("change", function() {
 
     result.style.display = "none";
     mapBtn.style.display = "none";
+});
+destinationProvinceInput.addEventListener("change", function() {
+
+    updateDestinationCities();
+
+    result.style.display = "none";
+    mapBtn.style.display = "none";
+
 });
 
 // =====================================
@@ -533,7 +723,9 @@ async function calculatePrice() {
 
     const destination = destinationInput.value.trim();
 
-   const car = carInput.value;
+    const destinationProvince = destinationProvinceInput.value;
+
+    const car = carInput.value;
 
 // بررسی انتخاب سفر رفت و برگشت
 const isRoundTrip = document.getElementById("roundTrip").checked;
@@ -550,6 +742,13 @@ const rate = isRoundTrip
         return;
 
     }
+    if (!destinationProvince) {
+
+    alert("لطفاً استان مقصد را انتخاب کنید.");
+
+    return;
+
+}
 
 
     if (destination === origin) {
@@ -615,7 +814,7 @@ if (originCoordinates[origin]) {
 
            
 
-            end = await getCoordinates(destination);
+           end = await getCoordinates(`${destination}, ${destinationProvince}`);
 
 
         } else {
@@ -627,7 +826,7 @@ if (originCoordinates[origin]) {
 
            
 
-            end = await getCoordinates(destination);
+           end = await getCoordinates(`${destination}, ${destinationProvince}`);
 
 
             const route = await getRoadDistance(start, end);
@@ -647,8 +846,13 @@ if (originCoordinates[origin]) {
 // محاسبه قیمت سفر + تعداد مسافران + بار
 // =====================================
 
+// محاسبه مسافت کل
+const totalDistance = isRoundTrip
+    ? distance * 2
+    : distance;
+
 // محاسبه قیمت پایه
-let basePrice = distance * rate;
+let basePrice = totalDistance * rate;
 
 // دریافت تعداد مسافران
 const passengers = Number(
@@ -672,6 +876,31 @@ const baggagePrice = basePrice * baggagePercent / 100;
 let finalPrice = Math.round(
     basePrice + baggagePrice
 );
+// ذخیره اطلاعات سفر برای پیام واتساپ
+lastTripDetails = {
+
+    originProvince: province,
+    origin: origin,
+
+    destinationProvince: destinationProvince,
+    destination: destination,
+
+    car: car,
+
+    distance: distance,
+    totalDistance: totalDistance,
+
+    isRoundTrip: isRoundTrip,
+
+    passengers: passengers,
+
+    baggagePercent: baggagePercent,
+
+    rate: rate,
+
+    finalPrice: finalPrice
+
+};
 
 // نمایش قیمت
 priceElement.textContent =
@@ -817,20 +1046,45 @@ document.getElementById("whatsappBtn").addEventListener("click", function(e) {
         return;
     }
 
+    if (!lastTripDetails) {
+    alert("لطفاً ابتدا هزینه سفر را محاسبه کنید.");
+    return;
+}
+
     if (!price || price === "۰ تومان") {
         alert("لطفاً ابتدا هزینه سفر را محاسبه کنید.");
         return;
     }
 
-    const message = `
+    const trip = lastTripDetails;
+
+const message = `
 سلام، برای رزرو سفر از سایت همسفر پیام می‌دهم.
 
-مبدأ: ${origin}
-مقصد: ${destination}
-خودرو: ${car}
-تعداد مسافران: ${passengers} نفر
+اطلاعات سفر:
+
+استان مبدأ: ${trip.originProvince}
+شهر مبدأ: ${trip.origin}
+
+استان مقصد: ${trip.destinationProvince}
+شهر مقصد: ${trip.destination}
+
+خودرو: ${trip.car}
+
+نوع سفر: ${trip.isRoundTrip ? "رفت و برگشت" : "یک‌طرفه"}
+
+مسافت یک‌طرفه: ${trip.distance.toLocaleString("fa-IR")} کیلومتر
+مسافت کل: ${trip.totalDistance.toLocaleString("fa-IR")} کیلومتر
+
+تعداد مسافران: ${trip.passengers} نفر
+
 میزان بار همراه: ${luggage}
-هزینه نهایی سفر: ${price}
+
+اضافه‌بهای بار: ${trip.baggagePercent} درصد
+
+نرخ هر کیلومتر: ${trip.rate.toLocaleString("fa-IR")} تومان
+
+هزینه نهایی سفر: ${trip.finalPrice.toLocaleString("fa-IR")} تومان
 
 لطفاً برای هماهنگی با من تماس بگیرید.
 
