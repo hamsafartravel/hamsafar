@@ -402,9 +402,9 @@ function updateDestinationCities() {
 
     const cities = provinceCities[province];
 
-    const cityList = document.getElementById("destinationCityList");
+    const cityList = document.getElementById("destination");
 
-    cityList.innerHTML = "";
+    cityList.innerHTML = '<option value="">شهر مقصد را انتخاب کنید</option>';
 
     if (cities) {
 
@@ -413,12 +413,18 @@ function updateDestinationCities() {
             const option = document.createElement("option");
 
             option.value = city;
+            option.textContent = city;
 
             cityList.appendChild(option);
 
         });
 
     }
+
+    destinationInput.value = "";
+    destinationInput.disabled = false;
+
+}
 
     destinationInput.value = "";
 
