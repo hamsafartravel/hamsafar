@@ -426,12 +426,6 @@ function updateDestinationCities() {
 
 }
 
-    destinationInput.value = "";
-
-    destinationInput.disabled = false;
-
-}
-
 // =====================================
 // 6. نمایش خودروهای هر مبدأ
 // =====================================
