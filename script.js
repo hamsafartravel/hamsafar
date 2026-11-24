@@ -737,7 +737,7 @@ const rate = isRoundTrip
 
     if (!destination) {
 
-        alert("لطفاً مقصد سفر را وارد کنید.");
+       alert("لطفاً شهر مقصد را انتخاب کنید.");
 
         return;
 
